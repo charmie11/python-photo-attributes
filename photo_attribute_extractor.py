@@ -16,7 +16,6 @@ def make_test_image():
     filename = 'photo-without-exif.jpg'
     skimage.io.imsave(filename, image)
     extractor = exif.Image(filename)
-    print(f'{filename} has exif: {extractor.has_exif}')
 
     # add exif information
     exif_image = exif.Image(filename)
@@ -106,6 +105,15 @@ def main():
 
         print(f'  date taken: {extractor.extract_date()}')
         print(f'  address: {extractor.extract_address()}')
+
+    #
+    extractor = PhotoAttributeExtractor('photo-with-exif.jpg')
+    print(f'  Building name not contained: {extractor.extract_address()}')
+    extractor.image.gps_latitude = (35.0, 51.0, 86.14)
+    extractor.image.gps_latitude_ref = 'N'
+    extractor.image.gps_longitude = (134.0, 17.0, 49.25)
+    extractor.image.gps_longitude_ref = 'E'
+    print(f'  Building name contained: {extractor.extract_address()}')
 
 
 if __name__ == '__main__':
